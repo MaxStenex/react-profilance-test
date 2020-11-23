@@ -1,0 +1,22 @@
+.home {
+  &__main {
+    padding-top: 75px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  &__cat {
+    width: 300px;
+    margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 7px black;
+    margin-bottom: 15px;
+  }
+
+  &__title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 35px;
+  }
+}

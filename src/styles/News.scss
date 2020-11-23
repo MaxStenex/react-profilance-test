@@ -1,0 +1,35 @@
+.news {
+  padding-top: 75px;
+  &__title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 150px;
+    margin-bottom: 30px;
+  }
+
+  &__label {
+    margin-right: 15px;
+  }
+
+  &__search {
+    border-radius: 5px;
+    border: 2px solid black;
+    flex: 1;
+    padding: 5px 15px 5px 10px;
+    font-size: 18px;
+  }
+
+  &__articles {
+  }
+
+  &__article {
+  }
+}

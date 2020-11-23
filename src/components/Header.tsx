@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/Header.scss";
 import { LoginPopup } from "./";
 
@@ -12,10 +13,10 @@ const Header: React.FC = () => {
           <nav className="header__navigation navigation">
             <ul className="navigation__list">
               <li className="navigation__link">
-                <a href="#">Главная</a>
+                <Link to="/home">Главная</Link>
               </li>
               <li className="navigation__link">
-                <a href="#">Новости</a>
+                <Link to="/news">Новости</Link>
               </li>
             </ul>
           </nav>
@@ -27,7 +28,7 @@ const Header: React.FC = () => {
           >
             Войти
           </button>
-          <LoginPopup opened={isPopupOpened} />
+          <LoginPopup opened={isPopupOpened} togglePopup={setIsPopupOpened} />
         </div>
       </div>
     </header>
