@@ -1,3 +1,4 @@
-import App from "./App";
+import Header from "./Header";
+import LoginPopup from "./LoginPopup";
 
-export { App };
+export { Header, LoginPopup };
