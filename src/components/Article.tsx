@@ -9,7 +9,7 @@ const Article: React.FC<ArticleType> = ({ text, title, createdAt }) => {
       <p className="article__text">{text}</p>
       <span className="article__date">
         <span>Написано: </span>
-        {createdAt}
+        {createdAt.toLocaleString()}
       </span>
     </li>
   );
