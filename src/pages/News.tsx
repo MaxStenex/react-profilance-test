@@ -3,20 +3,25 @@ import "../styles/News.scss";
 import { Article } from "../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
+import { Link } from "react-router-dom";
 
 const News: React.FC = () => {
-  const articles = useSelector((state: RootState) => state.news.allNews);
+  // Все статьи, отсортированные по дате
+  const allArticles = useSelector((state: RootState) => state.news.allNews).sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  );
+
   const [filter, setFilter] = useState("");
-  const [filteredArticles, setFilteredArticles] = useState(articles);
+  const [filteredArticles, setFilteredArticles] = useState(allArticles);
 
   useEffect(() => {
-    // Фильтрация статей
+    // Фильтрация статей по тексту
     setFilteredArticles(
-      articles.filter((article) =>
+      allArticles.filter((article) =>
         article.title.toLowerCase().includes(filter.toLowerCase())
       )
     );
-  }, [filter, articles]);
+  }, [filter, allArticles]);
 
   return (
     <section className="news">
@@ -33,12 +38,15 @@ const News: React.FC = () => {
               setFilter(evt.target.value);
             }}
           />
+          <Link className="news__add-link" to="add-article">
+            Добавить статью
+          </Link>
         </div>
         <ul className="feed__articles">
           {filteredArticles.map((article) => (
             <Article
-              key={article.id}
-              id={article.id}
+              verified={article.verified}
+              key={article.createdAt.toString()}
               title={article.title}
               text={article.text}
               createdAt={article.createdAt}

@@ -2,7 +2,7 @@ import React from "react";
 import { ArticleType } from "../redux/news/reducer";
 import "../styles/Article.scss";
 
-const Article: React.FC<ArticleType> = ({ text, title, createdAt }) => {
+const Article: React.FC<ArticleType> = React.memo(({ text, title, createdAt }) => {
   return (
     <li className="feed__article article">
       <h3 className="article__title">{title}</h3>
@@ -13,6 +13,6 @@ const Article: React.FC<ArticleType> = ({ text, title, createdAt }) => {
       </span>
     </li>
   );
-};
+});
 
 export default Article;
