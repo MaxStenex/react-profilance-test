@@ -1,3 +1,4 @@
+import { Roles } from "../user/reducer";
 import { NewsActions, NewsActionTypes } from "./actions";
 
 export interface ArticleType {
@@ -10,6 +11,7 @@ export interface ArticleType {
 
 export interface NewsStateType {
   allNews: Array<ArticleType>;
+  filteredNews: Array<ArticleType>;
 }
 
 const initialState: NewsStateType = {
@@ -56,17 +58,20 @@ const initialState: NewsStateType = {
       createdBy: "user",
     },
   ],
+  filteredNews: [],
 };
 
 export const newsReducer = (state = initialState, action: NewsActions): NewsStateType => {
   switch (action.type) {
     case NewsActionTypes.ADD_ARTICLE: {
       return {
+        ...state,
         allNews: [...state.allNews, action.payload],
       };
     }
     case NewsActionTypes.VERIFY_ARTICLE: {
       return {
+        ...state,
         allNews: state.allNews.map((article) => {
           if (article.createdAt === action.payload.createdAt) {
             article.verified = true;
@@ -77,9 +82,30 @@ export const newsReducer = (state = initialState, action: NewsActions): NewsStat
     }
     case NewsActionTypes.DELETE_ARTICLE: {
       return {
+        ...state,
         allNews: state.allNews.filter((article) =>
           article.createdAt !== action.payload.createdAt ? true : false
         ),
+      };
+    }
+
+    case NewsActionTypes.FILTER_ARTICLES: {
+      return {
+        ...state,
+        filteredNews: state.allNews
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .filter((article) => {
+            // Если пользователь гость, то он будет видеть только подтвержденные статьи
+            if (action.payload.role === Roles.Guest) {
+              return article.verified === true;
+            }
+            // Пользователи видят все подтвержденные статьи + свои
+            if (action.payload.login === Roles.User) {
+              return article.createdBy === action.payload.login;
+            }
+            // Админ видит все статьи
+            return article;
+          }),
       };
     }
 

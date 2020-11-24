@@ -1,32 +1,26 @@
 import React, { useEffect, useState } from "react";
 import "../styles/News.scss";
 import { Article } from "../components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { Link } from "react-router-dom";
-import { Roles } from "../redux/user/reducer";
+import { filterArticles } from "../redux/news/actions";
 
 const News: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
-  // Подтвержденные статьи, сортированные по дате
-  const articles = useSelector((state: RootState) => state.news.allNews)
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .filter((article) => {
-      // Если пользователь гость, то он будет видеть только подтвержденные статьи
-
-      if (user.role === Roles.Guest) {
-        return article.verified === true;
-      }
-      // Пользователи видят все подтвержденные статьи + свои
-      if (user.role === Roles.User) {
-        return article.createdBy === user.login;
-      }
-      // Админ видит все статьи
-      return article;
-    });
+  // Все статьи
+  const allArticles = useSelector((state: RootState) => state.news.allNews);
+  // Статьи, сортированные в зависимости от типа пользователя
+  const articles = useSelector((state: RootState) => state.news.filteredNews);
+  const dispatch = useDispatch();
 
   const [textFilter, setTextFilter] = useState("");
   const [filteredArticles, setFilteredArticles] = useState(articles);
+
+  useEffect(() => {
+    // Сортировка, в зависимости от типа пользователя
+    dispatch(filterArticles(user.role, user.login));
+  }, [dispatch, user.login, user.role, allArticles]);
 
   useEffect(() => {
     // Фильтрация статей по тексту
@@ -35,8 +29,7 @@ const News: React.FC = () => {
         article.title.toLowerCase().includes(textFilter.toLowerCase())
       )
     );
-  }, [textFilter, user.role]);
-  // console.log("Rendering");
+  }, [textFilter, user.role, articles]);
 
   return (
     <section className="news">

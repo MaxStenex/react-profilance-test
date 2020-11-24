@@ -1,12 +1,18 @@
+import { Roles } from "../user/reducer";
 import { ArticleType } from "./reducer";
 
 export enum NewsActionTypes {
   ADD_ARTICLE = "ADD_ARTICLE",
+  FILTER_ARTICLES = "FILTER_ARTICLES",
   VERIFY_ARTICLE = "VERIFY_ARTICLE",
   DELETE_ARTICLE = "DELETE_ARTICLE",
 }
 
-export type NewsActions = AddArticleType | VerifyArticleType | DeleteArticleType;
+export type NewsActions =
+  | AddArticleType
+  | VerifyArticleType
+  | DeleteArticleType
+  | FilterArticlesType;
 
 interface AddArticleType {
   type: NewsActionTypes.ADD_ARTICLE;
@@ -28,6 +34,24 @@ export const addArticle = (
       createdAt,
       verified,
       createdBy,
+    },
+  };
+};
+
+interface FilterArticlesType {
+  type: NewsActionTypes.FILTER_ARTICLES;
+  payload: {
+    role: Roles;
+    login: string | null;
+  };
+}
+
+export const filterArticles = (role: Roles, login: string | null): FilterArticlesType => {
+  return {
+    type: NewsActionTypes.FILTER_ARTICLES,
+    payload: {
+      role,
+      login,
     },
   };
 };
