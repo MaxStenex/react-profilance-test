@@ -11,6 +11,16 @@
   color: #000;
   display: none;
 
+  animation: 0.2s linear 0s from_top;
+  @keyframes from_top {
+    from {
+      top: -10%;
+    }
+    to {
+      top: 30%;
+    }
+  }
+
   &__opened {
     display: block;
   }

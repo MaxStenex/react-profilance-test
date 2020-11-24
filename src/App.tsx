@@ -3,7 +3,7 @@ import "./styles/App.scss";
 import "./styles/normalize.scss";
 import { Header } from "./components";
 import { News, Home } from "./pages";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 const App: React.FC = () => {
   return (
@@ -12,6 +12,7 @@ const App: React.FC = () => {
       <Switch>
         <Route path="/home" component={Home} />
         <Route path="/news" component={News} />
+        <Route exact path="/" render={() => <Redirect to="/home" />} />
       </Switch>
     </>
   );

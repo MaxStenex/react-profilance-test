@@ -1,8 +1,12 @@
 import React from "react";
 import "../styles/News.scss";
 import { Article } from "../components";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 const News: React.FC = () => {
+  const articles = useSelector((state: RootState) => state.news.allNews);
+
   return (
     <section className="news">
       <div className="container">
@@ -12,8 +16,15 @@ const News: React.FC = () => {
           <input type="text" className="news__search" />
         </div>
         <ul className="feed__articles">
-          <Article />
-          <Article />
+          {articles.map((article) => (
+            <Article
+              key={article.id}
+              id={article.id}
+              title={article.title}
+              text={article.text}
+              createdAt={article.createdAt}
+            />
+          ))}
         </ul>
       </div>
     </section>
