@@ -64,6 +64,12 @@
     display: flex;
   }
 
+  &__error {
+    color: red;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
   &__submit {
     display: block;
     font-size: 20px;
