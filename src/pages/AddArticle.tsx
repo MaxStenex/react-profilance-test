@@ -8,19 +8,19 @@ import "../styles/AddArticle.scss";
 const AddArticle: React.FC = () => {
   const [articleData, setArticleData] = useState({ title: "", text: "" });
   const [error, setError] = useState(false);
-  const userRole = useSelector((state: RootState) => state.user.role);
+  const user = useSelector((state: RootState) => state.user);
 
   const dispatch = useDispatch();
   const onAdd = (evt: React.FormEvent) => {
     evt.preventDefault();
     const { title, text } = articleData;
-    if (userRole === Roles.Guest) {
+    if (user.role === Roles.Guest) {
       return setError(true);
     }
     // Валидация на пустые строки
     if (text.trim() !== "" && title.trim() !== "") {
       const { title, text } = articleData;
-      dispatch(addArticle(title, text, new Date(), false));
+      dispatch(addArticle(title, text, new Date(), false, user.login));
       setArticleData({ title: "", text: "" });
       setError(false);
     }

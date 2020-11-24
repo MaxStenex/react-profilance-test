@@ -19,4 +19,36 @@
       font-size: 20px;
     }
   }
+
+  &__admin-buttons {
+    margin-top: 15px;
+    & button {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  &__approve-btn {
+    margin-right: 10px;
+    background-color: green;
+    border: 2px solid green;
+    color: #fff;
+    &:hover {
+      background-color: #fff;
+      color: green;
+      transition: 0.2s;
+    }
+  }
+
+  &__delete-btn {
+    background-color: red;
+    color: #fff;
+    border: 2px solid red;
+    &:hover {
+      background-color: #fff;
+      color: red;
+      transition: 0.2s;
+    }
+  }
 }

@@ -4,24 +4,39 @@ import { Article } from "../components";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { Link } from "react-router-dom";
+import { Roles } from "../redux/user/reducer";
 
 const News: React.FC = () => {
-  // Все статьи, отсортированные по дате
-  const allArticles = useSelector((state: RootState) => state.news.allNews).sort(
-    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-  );
+  const user = useSelector((state: RootState) => state.user);
+  // Подтвержденные статьи, сортированные по дате
+  const articles = useSelector((state: RootState) => state.news.allNews)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .filter((article) => {
+      // Если пользователь гость, то он будет видеть только подтвержденные статьи
 
-  const [filter, setFilter] = useState("");
-  const [filteredArticles, setFilteredArticles] = useState(allArticles);
+      if (user.role === Roles.Guest) {
+        return article.verified === true;
+      }
+      // Пользователи видят все подтвержденные статьи + свои
+      if (user.role === Roles.User) {
+        return article.createdBy === user.login;
+      }
+      // Админ видит все статьи
+      return article;
+    });
+
+  const [textFilter, setTextFilter] = useState("");
+  const [filteredArticles, setFilteredArticles] = useState(articles);
 
   useEffect(() => {
     // Фильтрация статей по тексту
     setFilteredArticles(
-      allArticles.filter((article) =>
-        article.title.toLowerCase().includes(filter.toLowerCase())
+      articles.filter((article) =>
+        article.title.toLowerCase().includes(textFilter.toLowerCase())
       )
     );
-  }, [filter, allArticles]);
+  }, [textFilter, user.role]);
+  // console.log("Rendering");
 
   return (
     <section className="news">
@@ -32,10 +47,10 @@ const News: React.FC = () => {
           <input
             type="text"
             className="news__search"
-            value={filter}
+            value={textFilter}
             placeholder="Название статьи..."
             onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-              setFilter(evt.target.value);
+              setTextFilter(evt.target.value);
             }}
           />
           <Link className="news__add-link" to="add-article">
@@ -43,15 +58,18 @@ const News: React.FC = () => {
           </Link>
         </div>
         <ul className="feed__articles">
-          {filteredArticles.map((article) => (
-            <Article
-              verified={article.verified}
-              key={article.createdAt.toString()}
-              title={article.title}
-              text={article.text}
-              createdAt={article.createdAt}
-            />
-          ))}
+          {filteredArticles.map((article) => {
+            return (
+              <Article
+                verified={article.verified}
+                key={article.createdAt.toString()}
+                title={article.title}
+                text={article.text}
+                createdAt={article.createdAt}
+                createdBy={article.createdBy}
+              />
+            );
+          })}
         </ul>
       </div>
     </section>
